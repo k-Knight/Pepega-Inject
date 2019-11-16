@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <link href="https://fonts.googleapis.com/css?family=Patua+One&display=swap" rel="stylesheet"> 
+    <script type="text/javascript">
+        const colors = [
+            '#6d0', '#08d', '#6d0', '#cc0', '#d40', '#08d'
+        ];
+        var colorIndex = null;
+
+        const getLetterColor = function() {
+            if (colorIndex == null)
+                colorIndex = 0;
+            else
+                colorIndex += 1;
+
+            if (colorIndex == colors.length)
+                colorIndex = 0;
+
+            return colors[colorIndex];
+        }
+
+        const createLetterStyle = function(color, shadowSize) {
+            style = 'color: #202225; font-weight: bolder; text-shadow: ';
+
+            for (let i = 0; i <= shadowSize; i++) {
+                if (i > 0)
+                    style += ', ';
+
+                style += `0 0 0.2em ${color}`;
+            }
+            
+            return style + ';';
+        }
+
+        const createTitle = function(titleText) {
+            var titleContainer = document.createElement('span');
+
+            for (let letter of titleText) {
+                var letterNode = document.createElement('span');
+                letterNode.setAttribute('style', /\s/.test(letter) ? '' :  createLetterStyle(getLetterColor(), 10));
+                letterNode.style.paddingLeft = '5px';
+                letterNode.style.paddingRight = '5px';
+                letterNode.style.paddingBottom = '0.1em';
+                letterNode.textContent = letter;
+
+                titleContainer.appendChild(letterNode);
+            }
+
+            return titleContainer;
+        }
+
+        window.onload = () => {
+            var body = document.getElementsByTagName('body')[0];
+        
+            var text = document.createElement('div');
+            text.appendChild(createTitle('Pepega Inject'));
+        
+            body.appendChild(text);
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: rgb(32, 34, 37);
+            font-family: 'Patua One';
+            font-size: 3em;
+        }
+        div {
+            display: block;
+            position: absolute;
+            top: 1em;
+            left: 1em;
+            padding: 0.05em 0.2em 0.25em;
+        }
+    </style>
+</head>
+<html>
+    <body></body>
+</html>
