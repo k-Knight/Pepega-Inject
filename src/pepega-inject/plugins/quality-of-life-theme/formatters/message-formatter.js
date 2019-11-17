@@ -12,7 +12,8 @@ const elementProperties = [
     { fieldName: 'marginBottom', cssName: 'margin-bottom'},
     { fieldName: 'borderWidth', cssName: 'border-width'},
     { fieldName: 'background', cssName: 'background'},
-    { fieldName: 'overflow', cssName: 'overflow'}
+    { fieldName: 'overflow', cssName: 'overflow'},
+    { fieldName: 'display', cssName: 'display'}
 ];
 
 recordElementProperties = function(element) {
@@ -32,7 +33,7 @@ recordElementProperties = function(element) {
 getElementProperty = function(element, property) {
     if (element.qolt && element.qolt[property])
         return element.qolt[property].value;
-    
+
     return element.style[property];
 }
 
@@ -56,7 +57,7 @@ resetElementProperties = function(element, exclude) {
 animateCollapseContent = function(element, transitionStyle) {
     recordElementProperties(element);
     element.style.transition = '';
-    
+
     requestAnimationFrame(() => {
         resetElementProperties(element);
         if (transitionStyle)
@@ -71,32 +72,41 @@ animateCollapseContent = function(element, transitionStyle) {
             element.style.borderWidth = '0px';
             element.style.background = 'none';
             element.style.overflow = 'hidden';
+
+            element.addEventListener('transitionend', function(e) {
+                element.removeEventListener('transitionend', arguments.callee);
+
+                element.style.setProperty("display", "none", "important")
+            });
         });
     });
 }
 
 animateExpandContent = function(element, transitionStyle) {
-    let exclude = ['overflow'];
+    element.style.display = getElementProperty(element, 'display');
 
-    if (transitionStyle) {
-        exclude.push('transition');
-        element.style.transition = transitionStyle;
-    }
+    requestAnimationFrame(() => {
+        let exclude = ['overflow'];
+        if (transitionStyle) {
+            exclude.push('transition');
+            element.style.transition = transitionStyle;
+        }
 
-    resetElementProperties(element, exclude);
+        resetElementProperties(element, exclude);
 
-    element.addEventListener('transitionend', function(e) {
-        element.removeEventListener('transitionend', arguments.callee);
-        
-        resetElementProperties(element);
-        unsetElementProperties(element);
+        element.addEventListener('transitionend', function(e) {
+            element.removeEventListener('transitionend', arguments.callee);
+
+            resetElementProperties(element);
+            unsetElementProperties(element);
+        });
     });
 }
 
 createCloser = function(node) {
     const transitionStyle = 'height 0.2s ease, margin 0.2s ease, padding 0.2s ease, border 0.2s ease';
     node.style.setProperty("box-sizing", "border-box", "important");
-    
+
     var closer = document.createElement("span");
     closer.setAttribute("class", "qolt-content-closer");
     closer.style.setProperty("transition", "background-color .15s ease, fill .15s ease, margin .2s ease", "important");
@@ -134,6 +144,16 @@ createCloser = function(node) {
     return closer;
 }
 
+appendCloser = function(parent, node, asyncExecute) {
+    asyncExecute.addTask(() => {
+        if (node.classList && !node.classList.contains("reactions-1xb2Ex") && !node.classList.contains("qolt-content-closer")) {
+            parent.qoltIsProcessing = true;
+            formatDownloadLinks(node);
+            parent.insertBefore(createCloser(node), node.nextSibling);
+        }
+    }, 10);
+}
+
 formatMessageContainer = function(node) {
     node.qoltIsProcessing = true;
     let asyncExecute = new AsyncExecute(() => {
@@ -145,14 +165,18 @@ formatMessageContainer = function(node) {
 
     node.style.setProperty("width", "100%", "important");
 
-    if (node && node.children) {
-        for (let childNode of node.children) {
-            if (!childNode.classList.contains("reactions-1xb2Ex"))
-                asyncExecute.addTask(() => {
-                    formatDownloadLinks(childNode);
-                    node.insertBefore(createCloser(childNode), childNode.nextSibling);
-                });
-        }
+    if (node) {
+        if (node.children)
+            for (let childNode of node.children)
+                appendCloser(node, childNode, asyncExecute);
+
+        let contentObserver = new MutationObserver((mutationsList, observer) => {
+            for (let mutation of mutationsList)
+                for (let childNode of mutation.addedNodes)
+                    appendCloser(node, childNode, asyncExecute);
+        });
+        contentObserver.observe(node, {attributes: false, childList: true, subtree: false});
+        ObserverArray.push(contentObserver);
     }
     node.qoltProcessed = true;
 }
@@ -162,11 +186,8 @@ findAndFormatMessages = function(nodes) {
         try {
             var messages = node.querySelectorAll(".containerCozy-B4noqO.container-1e22Ot");
             messages.forEach((message) => {
-                setTimeout(() => {
-                    if (!message.qoltProcessed) {
-                        formatMessageContainer(message);
-                    }
-                }, 10);
+                if (!message.qoltProcessed)
+                    formatMessageContainer(message);
             });
             if (messages && messages.length > 0)
                 return true;

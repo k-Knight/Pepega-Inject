@@ -636,7 +636,7 @@ class MainWindow (wx.Frame):
       self.contentPannel = InstallSucessPanel(self)
 
 
-versionNumber = 'v1.0.0'
+versionNumber = 'v1.0.1'
 app = wx.App()
 
 if os.path.exists('./fonts/RobotoSlab.ttf'):
