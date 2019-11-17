@@ -2,6 +2,7 @@ contentFormatter = function(mutationsList, observer) {
     for(let mutation of mutationsList) {
         if (mutation.target.classList) {
             if (mutation.target.classList.contains("content-98HsJk")) {
+                ObserverArray.clear();
                 mutation.qolt_processed = findAndFormatMessages(mutation.addedNodes);
             }
             else if (mutation.target.classList.contains("containerCozy-B4noqO") && mutation.target.classList.contains("container-1e22Ot")) {
