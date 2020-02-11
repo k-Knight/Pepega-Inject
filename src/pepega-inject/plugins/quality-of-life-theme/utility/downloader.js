@@ -1,5 +1,5 @@
 downloadItem = function(url, filename) {
-    IPC.execute(`
+    PepegaInject.IPC.execute(`
         const { dialog, app } = require('electron');
         dialog.showSaveDialog(null, {defaultPath : \`${filename}\`}, (path) => {
             if (path) {
@@ -8,19 +8,19 @@ downloadItem = function(url, filename) {
                         fs.writeFile(path, data, (err) => {
                             if (err) {
                                 console.error(err);
-                                qoltSendValue(new Error('failed to write downloaded file'));
+                                pepegaSendValue(new Error('failed to write downloaded file'));
                             } else {
-                                qoltSendValue(null);
+                                pepegaSendValue(null);
                             }
                         });
                     }).catch((err) => {
                         console.error(err);
-                        qoltSendValue(new Error('download request failed'));
+                        pepegaSendValue(new Error('download request failed'));
                     });
                 }
                 catch (err) {
                     console.error(err);
-                    qoltSendValue(new Error('failed to create download request'));
+                    pepegaSendValue(new Error('failed to create download request'));
                 }
             }
         });

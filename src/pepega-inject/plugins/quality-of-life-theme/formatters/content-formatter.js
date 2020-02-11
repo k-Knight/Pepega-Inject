@@ -1,23 +1,34 @@
 contentFormatter = function(mutationsList, observer) {
     for(let mutation of mutationsList) {
         if (mutation.target.classList) {
-            if (mutation.target.classList.contains("content-98HsJk")) {
-                ObserverArray.clear();
-                mutation.qolt_processed = findAndFormatMessages(mutation.addedNodes);
-            }
-            else if (mutation.target.classList.contains("containerCozy-B4noqO") && mutation.target.classList.contains("container-1e22Ot")) {
-                if (mutation.addedNodes.length > 0 && !mutation.target.qoltIsProcessing) {
-                    formatMessageContainer(mutation.target);
+            if (mutation.target.classList.contains("messages-3amgkR")) {
+                if (mutation.addedNodes.length > 0) {
+                    for (let message of mutation.addedNodes)
+                        if (!message.qoltIsProcessing)
+                            formatMessageContainer(message);
+
                     mutation.qolt_processed = true;
                 }
             }
-        }
+            if (!mutation.qolt_processed) {
+                if (mutation.target.classList.contains('content-98HsJk')) {
+                    for (let chat of mutation.addedNodes) {
+                        if (chat.classList && chat.classList.contains('chat-3bRxxu'))
+                            findAndFormatMessages(chat.querySelector('.chatContent-a9vAAp'));
+                    }
 
-        if (!mutation.qolt_processed) {
-            var contentContainer = document.querySelector(".content-98HsJk");
+                    mutation.qolt_processed = true;
+                }
+            }
+            if (!mutation.qolt_processed) {
+                if (mutation.target.classList.contains('content-yTz4x3')) {
+                    for (let chatContent of mutation.addedNodes) {
+                        if (chatContent.classList && chatContent.classList.contains('chatContent-a9vAAp'))
+                            findAndFormatMessages(chatContent);
+                    }
 
-            if (contentContainer && contentContainer.contains(mutation.target)) {
-                mutation.qolt_processed = findAndFormatMessages(mutation.addedNodes);
+                    mutation.qolt_processed = true;
+                }
             }
         }
 

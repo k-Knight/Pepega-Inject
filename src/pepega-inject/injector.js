@@ -25,6 +25,8 @@ exports.enableConsole = function() {
     consoleRequest = true;
 };
 
+const pepegaLoader = fs.readFileSync(path.resolve(__dirname, './pepega-loader.js'), 'utf8');
+
 const inject = function(libJsCode) {
     var plugins = filework.scanAndLoadPlugins("./plugins");
     var jsPayload = fs.readFileSync(path.resolve(__dirname, './css-loader.js'), 'utf8');
@@ -33,7 +35,7 @@ const inject = function(libJsCode) {
         jsPayload + (libJsCode ? libJsCode : "");
 
     for (let pluginCode of plugins.jsScripts)
-        jsPayload += `\nnew Function(${JSON.stringify(pluginCode)})();`
+        jsPayload += `\nnew Function(${JSON.stringify(pepegaLoader)} + ${JSON.stringify(pluginCode)})();`
 
     jsPayload = logger.addStatusReporter(
         jsPayload,
