@@ -59,6 +59,8 @@ const scanAndLoadPlugins = function(folder) {
                 plugins.jsScripts[length - 1] += "\n" + tryRead(file);
             else if (file.endsWith(".css"))
                 plugins.cssCode += "\n" + tryRead(file);
+            else if (file.endsWith("settings.json"))
+                plugins.jsScripts[length - 1] += "\nPepegaInject.settings = " + tryRead(file) + ";";
     }
 
     return plugins;

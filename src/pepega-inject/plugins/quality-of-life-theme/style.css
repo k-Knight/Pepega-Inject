@@ -1,23 +1,23 @@
-.embedWrapper-3AbfJJ:not(.attachment-33OFj0) {
+.container-1ov-mD > .embedWrapper-lXpS3L:not(.attachment-33OFj0) {
     max-width: 100% !important;
     max-height: 100% !important;
     --resize-background: linear-gradient(135deg,
-        rgba(46,48,54,.3) 0,
-        rgba(46,48,54,.3) calc(100% - 9px),
-        rgba(132, 139, 156, 0.3) calc(100% - 9px)
+        rgb(47,49,54) 0,
+        rgb(47,49,54) calc(100% - 9px),
+        rgb(73, 76, 85) calc(100% - 9px)
     );
 }
-.embed-IeVjo6.embedWrapper-3AbfJJ:not(.attachment-33OFj0) {
-    max-width: calc(100% - 66px) !important;
+.container-1ov-mD > .embedWrapper-lXpS3L:not(.attachment-33OFj0) {
+    max-width: calc(100% - 56px) !important;
     display: flex !important;
 }
-.embedInner-1-fpTo {
-    background: var(--resize-background);
+.container-1ov-mD > .embedWrapper-lXpS3L.imageWrapper-2p5ogY:not(.imageZoom-1n-ADA) {
     resize: both !important;
-    box-sizing: border-box;
+    background: var(--resize-background);
+    overflow: hidden !important;
+    padding: 16px;
 }
-.embedInner-1-fpTo,
-.embedWrapper-3AbfJJ > .grid-1nZz7S {
+.container-1ov-mD > .embedWrapper-lXpS3L > .grid-1nZz7S {
     resize: both !important;
     background: var(--resize-background);
     overflow: hidden !important;
@@ -25,74 +25,34 @@
     flex-direction: column;
     max-width: 100% !important;
     box-sizing: border-box;
+    min-width: 232px;
 }
-.embedInner-1-fpTo:after,
-.embedWrapper-3AbfJJ > .grid-1nZz7S:after {
-    content: "";
-    display: table;
-    clear: both;
- }
-.embedInner-1-fpTo > div {
-    display: block !important;
+.embedWrapper-lXpS3L > .wrapper-2TxpI8 {
+    width: 100% !important;
+    height: 100% !important;
 }
-.embedInner-1-fpTo > .embedVideo-3nf0O9:not(.imageZoom-1n-ADA),
-.embedWrapper-3AbfJJ > .grid-1nZz7S > .embedVideo-3nf0O9:not(.imageZoom-1n-ADA),
-.embedWrapper-3AbfJJ > .grid-1nZz7S > .embedVideo-3nf0O9:not(.imageZoom-1n-ADA) a {
+.embedWrapper-lXpS3L > .grid-1nZz7S > .embedVideo-3nf0O9:not(.imageZoom-1n-ADA),
+.embedWrapper-lXpS3L > .grid-1nZz7S > .embedVideo-3nf0O9:not(.imageZoom-1n-ADA) > a,
+.embedWrapper-lXpS3L > .grid-1nZz7S > .embedVideo-3nf0O9:not(.imageZoom-1n-ADA) a:not(.iconWrapper-21idzA) {
     min-height: 113px;
+    min-width: 200px;
     width: 100% !important;
     height: 100% !important;
     max-width: 100% !important;
     max-height: 100% !important;
 }
-.containerCozy-B4noqO.container-1e22Ot > .imageWrapper-2p5ogY.embedWrapper-3AbfJJ:not(.imageZoom-1n-ADA) {
-    resize: both !important;
-    padding: 12px;
-    background: linear-gradient(135deg,
-        #2d3035 0,
-        #2d3035 calc(100% - 9px),
-        rgba(132, 139, 156, 0.3) calc(100% - 9px)
-    );
-    border-radius: 3px !important;
-    box-sizing: border-box;
+.container-1ov-mD {
+    display: flex;
+    flex-flow: column;
 }
-.containerCozy-B4noqO.container-1e22Ot > .imageWrapper-2p5ogY.embedWrapper-3AbfJJ > div {
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 100% !important;
-    max-width: 100% !important;
-}
-.modal-3c3bKg .inner-1ilYF7 > div a.downloadLink-1ywL9o {
-    height: 20px;
-    padding: 5px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.25);
-    line-height: 20px;
-    margin-top: 5px;
-}
-.modal-3c3bKg .inner-1ilYF7 > div a.downloadLink-1ywL9o:hover {
-    text-decoration: none !important;
-    opacity: 0.85 !important;
-}
-.embed-IeVjo6.embedWrapper-3AbfJJ > .embedVideo-3nf0O9:not(.embedGIFV-3_ebID):not(.imageZoom-1n-ADA) {
-    padding: 12px;
-    background: linear-gradient(135deg,
-        #2d3035 0,
-        #2d3035 calc(100% - 9px),
-        rgba(132, 139, 156, 0.3) calc(100% - 9px)
-    );
-    resize: both !important;
-    box-sizing: border-box;
-    border-radius: 3px !important;
-    overflow: hidden;
-}
-.embed-IeVjo6.embedWrapper-3AbfJJ > .embedVideo-3nf0O9 > .imageWrapper-2p5ogY,
-.embed-IeVjo6.embedWrapper-3AbfJJ > .embedVideo-3nf0O9 > .imageWrapper-2p5ogY > .wrapper-2TxpI8 {
-    width: 100% !important;
-    height: 100% !important;
+.container-1ov-mD {
+    margin-top: 0.25rem;
 }
 
+
+
 .qolt-content-closer {
-    width: calc(100% - 66px) !important;
+    width: calc(100% - 56px) !important;
     height: 21px !important;
     display: block !important;
     border-radius: 3px !important;

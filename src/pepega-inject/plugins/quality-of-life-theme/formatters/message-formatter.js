@@ -54,6 +54,17 @@ resetElementProperties = function(element, exclude) {
                 element.style[property.fieldName] = element.qolt[property.fieldName].value;
 }
 
+setCollapedElementStyle = function(element) {
+    element.style.height = '0px';
+    element.style.paddingTop = '0px';
+    element.style.paddingBottom = '0px';
+    element.style.marginTop = '0px';
+    element.style.marginBottom = '0px';
+    element.style.borderWidth = '0px';
+    element.style.background = 'none';
+    element.style.overflow = 'hidden';
+}
+
 animateCollapseContent = function(element, transitionStyle) {
     recordElementProperties(element);
     element.style.transition = '';
@@ -64,22 +75,26 @@ animateCollapseContent = function(element, transitionStyle) {
             element.style.transition = transitionStyle;
 
         requestAnimationFrame(() => {
-            element.style.height = '0px';
-            element.style.paddingTop = '0px';
-            element.style.paddingBottom = '0px';
-            element.style.marginTop = '0px';
-            element.style.marginBottom = '0px';
-            element.style.borderWidth = '0px';
-            element.style.background = 'none';
-            element.style.overflow = 'hidden';
+            setCollapedElementStyle(element);
 
             element.addEventListener('transitionend', function(e) {
                 element.removeEventListener('transitionend', arguments.callee);
 
-                element.style.setProperty("display", "none", "important")
+                element.style.setProperty("display", "none", "important");
             });
         });
     });
+}
+
+immediateCollapseContent = function(element, transitionStyle) {
+    recordElementProperties(element);
+    element.style.transition = '';
+
+    setCollapedElementStyle(element);
+    element.style.setProperty("display", "none", "important");
+
+    if (transitionStyle)
+        element.style.transition = transitionStyle;
 }
 
 animateExpandContent = function(element, transitionStyle) {
@@ -109,7 +124,6 @@ createCloser = function(node) {
 
     var closer = document.createElement("span");
     closer.setAttribute("class", "qolt-content-closer");
-    closer.style.setProperty("transition", "background-color .15s ease, fill .15s ease, margin .2s ease", "important");
     closer.qoltContentVisible = true;
 
     var closerBtn = document.createElement("button");
@@ -118,7 +132,6 @@ createCloser = function(node) {
     closer.appendChild(closerBtn);
 
     var arrowSvg = closerBtn.children[0];
-    arrowSvg.style.setProperty("transition", "transform 0.3s", "important");
 
     closer.addEventListener("click", (event) => {
         try {
@@ -141,6 +154,16 @@ createCloser = function(node) {
         event.preventDefault();
     });
 
+    if (PepegaInject.settings['autocollapse']) {
+        immediateCollapseContent(node, transitionStyle);
+        closer.style.setProperty("margin-top", "8px", "important");
+        arrowSvg.style.setProperty("transform", "translateX(-50%) translateY(-50%) rotate(90deg)", "important");
+        closer.qoltContentVisible = false;
+    }
+
+    closer.style.setProperty("transition", "background-color .15s ease, fill .15s ease, margin .2s ease", "important");
+    arrowSvg.style.setProperty("transition", "transform 0.3s", "important");
+
     return closer;
 }
 
@@ -149,9 +172,20 @@ appendCloser = function(parent, node, asyncExecute) {
         if (node.classList && !node.classList.contains("reactions-1xb2Ex") && !node.classList.contains("qolt-content-closer")) {
             parent.qoltIsProcessing = true;
             formatDownloadLinks(node);
-            parent.insertBefore(createCloser(node), node.nextSibling);
+            if (node.qoltCloserExists != true) {
+                node.qoltCloserExists = true;
+                parent.insertBefore(createCloser(node), node.nextSibling);
+            }
         }
     }, 10);
+}
+
+formatEmdeds = function(container, asyncExecute) {
+    for (let childNode of container.children)
+        if (childNode.classList.contains('attachment-33OFj0'))
+            formatDownloadLinks(childNode);
+        else if (childNode.classList.contains('embedWrapper-lXpS3L') || childNode.classList.contains('spoilerContainer-331r0R'))
+            appendCloser(container, childNode, asyncExecute);
 }
 
 formatMessageContainer = function(node) {
@@ -163,39 +197,31 @@ formatMessageContainer = function(node) {
     for(closer of node.querySelectorAll(".qolt-content-closer"))
         closer.remove();
 
-    node.style.setProperty("width", "100%", "important");
-
     if (node) {
-        if (node.children)
-            for (let childNode of node.children)
-                appendCloser(node, childNode, asyncExecute);
+        if (node.children) {
+            let container =  node.querySelector('.container-1ov-mD');
 
-        let contentObserver = new MutationObserver((mutationsList, observer) => {
-            for (let mutation of mutationsList)
-                for (let childNode of mutation.addedNodes)
-                    appendCloser(node, childNode, asyncExecute);
-        });
-        contentObserver.observe(node, {attributes: false, childList: true, subtree: false});
-        ObserverArray.push(contentObserver);
+            if (container) {
+                formatEmdeds(container, asyncExecute);
+
+                let contentObserver = new MutationObserver((mutationsList, observer) => {
+                    formatEmdeds(container, asyncExecute);
+                });
+
+                contentObserver.observe(container, {attributes: false, childList: true, subtree: false});
+                ObserverArray.push(contentObserver);
+            }
+        }
     }
     node.qoltProcessed = true;
 }
 
-findAndFormatMessages = function(nodes) {
-    for (let node of nodes) {
-        try {
-            var messages = node.querySelectorAll(".containerCozy-B4noqO.container-1e22Ot");
-            messages.forEach((message) => {
-                if (!message.qoltProcessed)
-                    formatMessageContainer(message);
-            });
-            if (messages && messages.length > 0)
-                return true;
-            else
-                return false;
-        }
-        catch (err) {
-            return false;
-        }
+findAndFormatMessages = function(chatNode) {
+    if (chatNode) {
+        let messages = chatNode.querySelector('.messages-3amgkR');
+        
+        if (messages)
+            for (let message of messages.children)
+                formatMessageContainer(message);
     }
 }
