@@ -120,3 +120,19 @@
     display: none;
     object-fit: contain !important;
 }
+
+.qolt-video-new-window > button {
+    fill: buttonface;
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+    margin-left: 0px;
+    margin-right: 4px;
+    font-size: 0;
+    background: none;
+}
+.qolt-video-new-window > button > svg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}

@@ -184,8 +184,18 @@ formatEmdeds = function(container, asyncExecute) {
     for (let childNode of container.children)
         if (childNode.classList.contains('attachment-33OFj0'))
             formatDownloadLinks(childNode);
-        else if (childNode.classList.contains('embedWrapper-lXpS3L') || childNode.classList.contains('spoilerContainer-331r0R'))
+        else if (childNode.classList.contains('embedWrapper-lXpS3L') || childNode.classList.contains('spoilerContainer-331r0R')) {
             appendCloser(container, childNode, asyncExecute);
+
+            let videoEmbeds = childNode.querySelectorAll('.embedVideo-3nf0O9');
+            if (videoEmbeds && videoEmbeds.length > 0)
+                for (let videoEmbed of videoEmbeds) {
+                    if (!videoEmbed.qoltProcessed)
+                        formatVideoContainer(videoEmbed);
+                        
+                    videoEmbed.qoltProcessed = true;
+                }
+        }
 }
 
 formatMessageContainer = function(node) {
