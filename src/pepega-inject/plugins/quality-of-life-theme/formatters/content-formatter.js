@@ -42,10 +42,22 @@ contentFormatter = function(mutationsList, observer) {
             else if (mutation.addedNodes[0].classList.contains("layer-v9HyYc")) {
                 let contextMenu = mutation.addedNodes[0].querySelector(".contextMenu-HLZMGh");
                 if (contextMenu) {
-                    ContextMenuManager.registerContenxtMenu(contextMenu);
+                    ContextMenuManager.registerContextMenu(contextMenu);
                     mutation.qolt_processed = true;
                 }
             }
+        }
+
+        if (!mutation.qolt_processed && mutation.removedNodes.length == 1 && mutation.removedNodes[0].classList) {
+            if (mutation.removedNodes[0].classList.contains("modal-3c3bKg")) {
+                setTimeout(() => {
+                    cancelContentDisplay();
+                }, 10);
+                mutation.qolt_processed = true;
+            }
+            else if (mutation.removedNodes[0].classList.contains("layer-v9HyYc"))
+                if (mutation.removedNodes[0].querySelector(".contextMenu-HLZMGh"))
+                    ContextMenuManager.removeContextMenu();
         }
     }
 }

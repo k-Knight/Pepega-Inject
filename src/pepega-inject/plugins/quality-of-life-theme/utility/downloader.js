@@ -29,3 +29,10 @@ downloadItem = function(url, filename) {
             console.error(err);
     });
 }
+
+downloadFromUrl = function(url) {
+    let fileName = url.split("/");
+    fileName = fileName[fileName.length - 1];
+
+    downloadItem(url, fileName);
+}

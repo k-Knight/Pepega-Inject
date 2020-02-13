@@ -1,11 +1,9 @@
 setDownloadClickHandler = function($link) {
     let url = $link.attr("href");
-    let fileName = url.split("/");
-    fileName = fileName[fileName.length - 1];
 
     $link.on("click", (event) => {
         event.preventDefault();
-        downloadItem(url, fileName);
+        downloadFromUrl(url);
     });
 }
 

@@ -160,8 +160,22 @@ formatNonImageDisplay = function(imageContainer, imageNode, $originalLink) {
     })
 }
 
+contentDisplayMenuListener = null;
+
 formatContentDisplay = function(imageContainer) {
     let imageNode = null;
+
+    contentDisplayMenuListener = new ContextMenuListener((contextMenu) => {
+        contextMenu.appendItemGroup(1);
+        contextMenu.appendItem('Copy Original Image', () => {
+            copyImageFromUrl(getContentSrc(imageNode.children[0]));
+            setTimeout(() => { contextMenu.close(); }, 0);
+        });
+        contextMenu.appendItem('Save Original Image', () => {
+            downloadFromUrl(getContentSrc(imageNode.children[0]));
+            setTimeout(() => { contextMenu.close(); }, 0);
+        });
+    });
 
     if (imageContainer.classList.contains('imageWrapper-2p5ogY')) {
         imageNode = imageContainer;
@@ -184,6 +198,10 @@ formatContentDisplay = function(imageContainer) {
         else
             formatNonImageDisplay(imageContainer, imageNode, $originalLink);
     }
+}
+
+cancelContentDisplay = function() {
+    contentDisplayMenuListener.destroy();
 }
 
 getContentSrc = function(content) {

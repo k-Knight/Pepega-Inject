@@ -4,9 +4,16 @@ ContextMenu = class {
         this.$itemGroup = $(this.contextMenu.querySelector(".itemGroup-1tL0uz"));
     }
 
-    appendItemGroup() {
+    appendItemGroup(index) {
         this.$itemGroup = $("<div>").attr('class', 'itemGroup-1tL0uz');
-        $(this.contextMenu).append(this.$itemGroup);
+
+        if (index)
+            this.contextMenu.insertBefore(
+                this.$itemGroup[0],
+                this.contextMenu.children[index]
+            );
+        else
+            $(this.contextMenu).append(this.$itemGroup);
 
         return this;
     }
@@ -30,30 +37,52 @@ ContextMenu = class {
 
         return this;
     }
+
+    close() {
+        this.contextMenu.remove();
+        ContextMenuManager.removeContextMenu();
+    }
 }
 
 ContextMenuManager = class {
-    static registerContenxtMenu(contextMenu) {
+    static registerContextMenu(contextMenu) {
         this.contextMenu = new ContextMenu(contextMenu);
 
-        if (this.resolvePromise) {
-            this.resolvePromise(this.contextMenu);
-            this.rejectPromise = null
-            this.resolvePromise = null;
-        }
+        for(let listener of this.listeners)
+            listener.notify(this.contextMenu);
     }
 
-    static getContextMenu() {
-        return new Promise((resolve, reject) => {
-            if (this.contextMenu)
-                resolve(this.contextMenu);
-            else {
-                if (this.resolvePromise)
-                    this.rejectPromise(new Error("Another context menu request was made"));
+    static addListener(listener) {
+        this.listeners.push(listener);
 
-                this.resolvePromise = resolve;
-                this.rejectPromise = reject;
-            }
-        });
+        if (this.contextMenu)
+            listener.notify(this.contextMenu);
+    }
+
+    static removeListener(listener) {
+        let index = this.listeners.indexOf(listener);
+        if (index >= 0)
+            this.listeners.splice(index, 1);
+    }
+
+    static removeContextMenu() {
+        this.contextMenu = null;
+    }
+}
+ContextMenuManager.listeners = [];
+
+ContextMenuListener = class {
+    constructor(callback) {
+        this.callback = callback;
+        ContextMenuManager.addListener(this);
+    }
+
+    notify(contextMenu) {
+        if (this.callback)
+            this.callback(contextMenu);
+    }
+
+    destroy() {
+        ContextMenuManager.removeListener(this);
     }
 }
