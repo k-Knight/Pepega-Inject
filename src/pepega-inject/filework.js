@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const appendItems = function (items, folderPath) {
-    var scannedItems = fs.readdirSync(folderPath, {withFileTypes: true});
+    let scannedItems = fs.readdirSync(folderPath, {withFileTypes: true});
     if (scannedItems && scannedItems.length > 0)
         for (let item of scannedItems) {
             items.push(folderPath + "\\" + item.name);
@@ -10,17 +10,17 @@ const appendItems = function (items, folderPath) {
 }
 
 const scanFolder = function(folderPath, recursive, onlyFolders) {
-    var files = []
+    let files = []
     if (!path.isAbsolute(folderPath))
         folderPath = path.join(__dirname, folderPath);
 
-    var items = [];
+    let items = [];
     appendItems(items, folderPath);
 
     while (items.length > 0) {
-        var curItem = items.shift();
+        let curItem = items.shift();
 
-        var stat = fs.statSync(curItem);
+        let stat = fs.statSync(curItem);
         if (stat && stat.isDirectory()) {
             if (recursive)
                 appendItems(items, curItem);
@@ -47,8 +47,8 @@ const tryRead = function(filePath, resolve) {
 }
 
 const scanAndLoadPlugins = function(folder) {
-    var plugins = { cssCode: "", jsScripts: [] };
-    var pluginFolders = scanFolder(folder, false, true);
+    let plugins = { cssCode: "", jsScripts: [] };
+    let pluginFolders = scanFolder(folder, false, true);
 
     for (let pluginFolder of pluginFolders) {
         pluginFiles = scanFolder(pluginFolder, true);

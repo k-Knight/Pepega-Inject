@@ -8,7 +8,7 @@ setDownloadClickHandler = function($link) {
 }
 
 formatDownloadLinks = function(node) {
-    var links = [];
+    let links = [];
 
     if (node.classList.contains("attachment-33OFj0")) {
         links = node.querySelectorAll(".anchor-3Z-8Bb");

@@ -39,7 +39,7 @@ animateResizeContent = function($image, options, maximize) {
 
 animateResizeButton = function($btn, maximize) {
     if (!$btn.qoltTop || !$btn.qoltLeft) {
-        var rect = $btn[0].getBoundingClientRect();
+        let rect = $btn[0].getBoundingClientRect();
 
         $btn.qoltBottom = rect.top - 27.0;
         $btn.qoltRight = 5.0 - (window.innerWidth - rect.right);
@@ -80,7 +80,7 @@ maximizeClickHandler = function($btn, $image, $bigImage, $link) {
         $btn.attr("maximized", false);
     }
     else {
-        var boundingRect = $image[0].getBoundingClientRect();
+        let boundingRect = $image[0].getBoundingClientRect();
         animateResizeContent($bigImage, {
             width: $image.css("width"),
             height: $image.css("height"),

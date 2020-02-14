@@ -9,7 +9,7 @@ const request = function(url, options) {
             if (response.statusCode < 200 || response.statusCode > 299)
                 reject(new Error('Request failed, status code: ' + response.statusCode));
 
-            var data = [];
+            let data = [];
 
             response.on('data', (chunk) => { data.push(chunk); });
             response.on('end', () => { resolve(Buffer.concat(data)); });
@@ -22,9 +22,9 @@ const request = function(url, options) {
 }
 
 const requestConcurrent = function(urls, options, callback) {
-    var pendingCount = urls.length;
-    var results = new Array(urls.length);
-    var joiner = (id, result) => {
+    let pendingCount = urls.length;
+    let results = new Array(urls.length);
+    let joiner = (id, result) => {
         results[id] = result;
         pendingCount--;
 

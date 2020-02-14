@@ -122,16 +122,16 @@ createCloser = function(node) {
     const transitionStyle = 'height 0.2s ease, margin 0.2s ease, padding 0.2s ease, border 0.2s ease';
     node.style.setProperty("box-sizing", "border-box", "important");
 
-    var closer = document.createElement("span");
+    let closer = document.createElement("span");
     closer.setAttribute("class", "qolt-content-closer");
     closer.qoltContentVisible = true;
 
-    var closerBtn = document.createElement("button");
+    let closerBtn = document.createElement("button");
     closerBtn.setAttribute("class", "qolt-content-closer-btn");
     closerBtn.innerHTML = resources.arrowSvg;
     closer.appendChild(closerBtn);
 
-    var arrowSvg = closerBtn.children[0];
+    let arrowSvg = closerBtn.children[0];
 
     closer.addEventListener("click", (event) => {
         try {

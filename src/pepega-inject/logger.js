@@ -1,5 +1,5 @@
-var consoleEnabled = false;
-var devConsoleOwner = null;
+consoleEnabled = false;
+devConsoleOwner = null;
 
 exports.isConsoleEnabled = function() {
     return consoleEnabled;
@@ -11,7 +11,7 @@ exports.enable_console = function(webContents) {
     consoleEnabled = true;
 }
 
-var styles = {
+styles = {
     success: `color: #222;font-size: 18px;font-weight: bolder;
         text-shadow: 2px 0 #6d0, -2px 0 #6d0, 0 2px #6d0, 0 -2px #6d0,
         1px 1px #6d0, -1px -1px #6d0, -1px 1px #6d0, 1px -1px #6d0;`,
@@ -29,8 +29,8 @@ exports.styles = styles;
 
 exports.log = function(object, errorLevel, style) {
     if (consoleEnabled) {
-        var consoleFunction = null;
-        var data = null;
+        let consoleFunction = null;
+        let data = null;
 
         switch(errorLevel) {
             case 1: consoleFunction = "warn"; break;
