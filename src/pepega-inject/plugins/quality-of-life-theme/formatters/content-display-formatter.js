@@ -137,6 +137,9 @@ createContentMaximizer = function(imageContainer, imageNode, $originalLink, cont
     }
 }
 
+contentDisplayMenuListener = null;
+contentDisplayType = "none";
+
 formatNonImageDisplay = function(imageContainer, imageNode, $originalLink) {
     new Promise((resolve) => {
         if (['VIDEO'].includes(imageNode.children[0].tagName))
@@ -151,6 +154,8 @@ formatNonImageDisplay = function(imageContainer, imageNode, $originalLink) {
             imageContentOvserver.observe(imageNode, {attributes: false, childList: true, subtree: false});
         }
     }).then((content) => {
+        contentDisplayType = "media";
+
         createContentMaximizer(
             imageContainer,
             imageNode,
@@ -160,22 +165,8 @@ formatNonImageDisplay = function(imageContainer, imageNode, $originalLink) {
     })
 }
 
-contentDisplayMenuListener = null;
-
 formatContentDisplay = function(imageContainer) {
     let imageNode = null;
-
-    contentDisplayMenuListener = new ContextMenuListener((contextMenu) => {
-        contextMenu.appendItemGroup(1);
-        contextMenu.appendItem('Copy Original Image', () => {
-            copyImageFromUrl(getContentSrc(imageNode.children[0]));
-            setTimeout(() => { contextMenu.close(); }, 0);
-        });
-        contextMenu.appendItem('Save Original Image', () => {
-            downloadFromUrl(getContentSrc(imageNode.children[0]));
-            setTimeout(() => { contextMenu.close(); }, 0);
-        });
-    });
 
     if (imageContainer.classList.contains('imageWrapper-2p5ogY')) {
         imageNode = imageContainer;
@@ -188,6 +179,20 @@ formatContentDisplay = function(imageContainer) {
         let $originalLink = $(imageContainer.querySelector("a"));
 
         if (imageNode.children[0].tagName == 'IMG') {
+            contentDisplayType = 'image';
+
+            contentDisplayMenuListener = new ContextMenuListener((contextMenu) => {
+                contextMenu.appendItemGroup(1);
+                contextMenu.appendItem('Copy Original Image', () => {
+                    copyImageFromUrl(getContentSrc(imageNode.children[0]));
+                    setTimeout(() => { contextMenu.close(); }, 0);
+                });
+                contextMenu.appendItem('Save Original Image', () => {
+                    downloadFromUrl(getContentSrc(imageNode.children[0]));
+                    setTimeout(() => { contextMenu.close(); }, 0);
+                });
+            });
+
             createContentMaximizer(
                 imageContainer,
                 imageNode,
@@ -201,7 +206,10 @@ formatContentDisplay = function(imageContainer) {
 }
 
 cancelContentDisplay = function() {
-    contentDisplayMenuListener.destroy();
+    if (contentDisplayType == "image") {
+        contentDisplayType = "none";
+        contentDisplayMenuListener.destroy();
+    }
 }
 
 getContentSrc = function(content) {
