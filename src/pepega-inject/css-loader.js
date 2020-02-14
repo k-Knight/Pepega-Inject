@@ -1,7 +1,7 @@
 window.headInjectScripts = function() {
     if (window.pepegaInject.pepegaCssCode) {
-        var headElement = null;
-        var customCssTag = document.getElementById('pepega-inject-css');
+        let headElement = null;
+        let customCssTag = document.getElementById('pepega-inject-css');
     
         if (!customCssTag)
             headElement =  document.getElementsByTagName('head')[0];

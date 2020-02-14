@@ -6,11 +6,11 @@ const request = require('./request');
 const logger = require('./logger');
 const ipcDiscord = require('../core.asar/app/ipcMain');
 
-var initialized = false;
-var windowWebContents = null;
-var consoleRequest = false;
-var executionChannelRequest = false;
-var jsLibs = [];
+initialized = false;
+windowWebContents = null;
+consoleRequest = false;
+executionChannelRequest = false;
+jsLibs = [];
 
 exports.requireLib = function(libs) {
     if (libs) {
@@ -28,8 +28,8 @@ exports.enableConsole = function() {
 const pepegaLoader = fs.readFileSync(path.resolve(__dirname, './pepega-loader.js'), 'utf8');
 
 const inject = function(libJsCode) {
-    var plugins = filework.scanAndLoadPlugins("./plugins");
-    var jsPayload = fs.readFileSync(path.resolve(__dirname, './css-loader.js'), 'utf8');
+    let plugins = filework.scanAndLoadPlugins("./plugins");
+    let jsPayload = fs.readFileSync(path.resolve(__dirname, './css-loader.js'), 'utf8');
 
     jsPayload = "window.pepegaInject = { pepegaCssCode: " + JSON.stringify(plugins.cssCode) + " }\n" +
         jsPayload + (libJsCode ? libJsCode : "");
@@ -55,7 +55,7 @@ const initialize = async function() {
                 jsLibs,
                 {method: 'GET', timeout: 5000},
                 (results) => {
-                    var jsCode = "";
+                    let jsCode = "";
                     for (let result of results)
                         jsCode += result ? result : "";
                     inject(jsCode);
