@@ -19,16 +19,12 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
-    add_compile_options("-mwindows")
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mwindows")
-    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -mwindows")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -mwindows -static")
+    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -mwindows -static")
 
     set(wxWidgets_LIB_DIR "C:/C++/wxWidgets/lib/release/gcc_x64_lib")
     set(wxWidgets_LIBRARIES "C:/C++/wxWidgets/lib/release")
     set(wxWidgets_CONFIGURATION mswu)
-
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O3")
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O3")
 endif()
 
 find_package(wxWidgets COMPONENTS core base png REQUIRED)

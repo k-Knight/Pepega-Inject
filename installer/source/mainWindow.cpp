@@ -5,7 +5,6 @@
 #include "../include/titlePanel.hpp"
 #include "../include/contentPanel.hpp"
 #include "../resources/include/resources.hpp"
-#include <exception>
 
 using namespace std;
 
