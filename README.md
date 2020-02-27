@@ -6,9 +6,7 @@ This injector is so **simple** that it does not require the modification of disc
 
 ## Installation
 
-The prerequisite for using installer is that you'll have to install Python scripting language. You can the newest version from here: [Download Python](https://www.python.org/downloads/). For now I recommend using ``3.7.5`` version of Python.
-
-Just run the **``isntaller.pyw``** and select the Discord's main application folder and the injector will be installed. Alternatively, you can run the **``isntaller.py``** if you are confident that installation will complete correctly without your input.
+The installers are available in the [releases](https://github.com/k-Knight/Pepega-Inject/releases). To install **Pepega-Inject** just download and start the installer and select the directory that contains the ``discord_desktop_core`` module of Discord (*it should contain ``core.asar`` and `index.js` files*). 
 
 ## Developing plugins
 
