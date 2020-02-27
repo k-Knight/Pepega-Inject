@@ -1,0 +1,9 @@
+categories:
+    display:
+        directories:
+            - ..\resources
+        files:
+    injector:
+        directories:
+            - ..\pepega_inject
+        files:
