@@ -8,17 +8,26 @@
 
 class titlePanel : public wxPanel {
 private:
-    wxWindow *title_image, *close_button, *minimize_button;
+    wxWindow *title_image, *close_button, *minimize_button, *drag_box;
     void addPanelControls();
 public:
     titlePanel(wxWindow *parent);
-    ~titlePanel();
+};
+
+class dragBox : public wxControl {
+private:
+    wxPoint delta = {0, 0};
+    void onLeftUp(wxMouseEvent &event);
+    void onLeftDown(wxMouseEvent &event);
+    void onMouseMove(wxMouseEvent &event);
+
+public:
+    dragBox(wxWindow *parent);
 };
 
 class titleImage : public wxStaticBitmap {
 public:
     titleImage(wxWindow *parent);
-    ~titleImage();
 };
 
 class closeButton : public actionBitmapButton {

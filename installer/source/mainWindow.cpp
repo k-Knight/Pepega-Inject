@@ -33,40 +33,6 @@ mainWindow::mainWindow() : wxFrame(NULL, wxID_ANY, "", wxDefaultPosition, wxSize
 }
 
 void mainWindow::onCloseWindow(wxEvent &event) {
-    std::terminate();
-}
-
-void mainWindow::onLeftDown(wxMouseEvent &event) {
-    CaptureMouse();
-
-    auto pos = mainWindow::window->ClientToScreen(event.GetPosition());
-    auto origin = mainWindow::window->GetPosition();
-
-    delta = {pos.x - origin.x, pos.y - origin.y};
-}
-
-void mainWindow::onLeftUp(wxMouseEvent &event) {
-    if (HasCapture())
-        ReleaseMouse();
-}
-
-void mainWindow::onMouseMove(wxMouseEvent &event) {
-    if (HasCapture() && event.Dragging() && event.LeftIsDown()) {
-        auto pos = mainWindow::window->ClientToScreen(event.GetPosition());
-        pos = {pos.x - delta.x, pos.y - delta.y};
-
-        mainWindow::window->Move(pos);
-    }
-}
-
-void mainWindow::makeDraggable(wxWindow* wx_object) {
-    wx_object->Bind(wxEVT_LEFT_DOWN, &mainWindow::onLeftDown, this);
-    wx_object->Bind(wxEVT_LEFT_UP, &mainWindow::onLeftUp, this);
-    wx_object->Bind(wxEVT_MOTION, &mainWindow::onMouseMove, this);
-}
-
-void mainWindow::unmakeDraggable(wxWindow* wx_object) {
-    wx_object->Unbind(wxEVT_LEFT_DOWN, &mainWindow::onLeftDown, this);
-    wx_object->Unbind(wxEVT_LEFT_UP, &mainWindow::onLeftUp, this);
-    wx_object->Unbind(wxEVT_MOTION, &mainWindow::onMouseMove, this);
+    Destroy();
+    mainWindow::window = nullptr;
 }

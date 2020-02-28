@@ -4,6 +4,7 @@
 #include "../include/mainWindow.hpp"
 #include "../include/scaledBitmap.hpp"
 #include "../resources/include/resources.hpp"
+#include "../include/os_preproc.hpp"
 
 using namespace std;
 using namespace Resources;
@@ -12,19 +13,55 @@ titlePanel::titlePanel(wxWindow *parent) : wxPanel(parent, wxID_ANY, {0, 0}, {70
     SetDoubleBuffered(true);
     SetBackgroundColour(colorDef.at(colors::background));
 
-    mainWindow::window->makeDraggable(this);
     addPanelControls();
 }
 
-titlePanel::~titlePanel() {
-    mainWindow::window->unmakeDraggable(this);
-    DestroyChildren();
-}
-
 void titlePanel::addPanelControls() {
-    title_image = new titleImage(this);
     close_button = new closeButton(this);
     minimize_button = new minimizeButton(this);
+    drag_box = new dragBox(this);
+    title_image = new titleImage(this);
+}
+
+dragBox::dragBox(wxWindow *parent) : wxControl(parent, wxID_ANY, {0, 0}, {616, 24}) {
+    
+    wxColour transparentColor = wxColour(wxTransparentColour);
+
+    #ifdef OS_WIN
+        SetBackgroundColour(transparentColor);
+        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
+        SetWindowLong(GetHandle(), GWL_EXSTYLE, GetWindowLong(GetHandle(), GWL_EXSTYLE) | WS_EX_LAYERED);
+        SetLayeredWindowAttributes(GetHandle(), transparentColor.GetRGB(), 255, LWA_ALPHA);
+        SetLayeredWindowAttributes(GetHandle(), transparentColor.GetRGB(), 255, LWA_COLORKEY);
+    #endif
+    
+    Bind(wxEVT_LEFT_DOWN, &dragBox::onLeftDown, this);
+    Bind(wxEVT_LEFT_UP, &dragBox::onLeftUp, this);
+    Bind(wxEVT_MOTION, &dragBox::onMouseMove, this);
+}
+
+void dragBox::onLeftDown(wxMouseEvent &event) {
+    CaptureMouse();
+
+    auto pos = mainWindow::window->ClientToScreen(event.GetPosition());
+    auto origin = mainWindow::window->GetPosition();
+
+    delta = {pos.x - origin.x, pos.y - origin.y};
+}
+
+void dragBox::onLeftUp(wxMouseEvent &event) {
+    if (HasCapture())
+        ReleaseMouse();
+}
+
+void dragBox::onMouseMove(wxMouseEvent &event) {
+    if (HasCapture() && event.Dragging() && event.LeftIsDown()) {
+        auto pos = mainWindow::window->ClientToScreen(event.GetPosition());
+        pos = {pos.x - delta.x, pos.y - delta.y};
+
+        mainWindow::window->Move(pos);
+    }
 }
 
 titleImage::titleImage(wxWindow *parent) : wxStaticBitmap(
@@ -38,13 +75,10 @@ titleImage::titleImage(wxWindow *parent) : wxStaticBitmap(
     ),
     {2, 0}
 ) {
-    wxStaticBitmap::SetSize(GetBitmap().GetWidth(), GetBitmap().GetHeight());
-    mainWindow::window->makeDraggable(this);
+    //wxStaticBitmap::SetSize(GetBitmap().GetWidth(), GetBitmap().GetHeight());
+    //mainWindow::window->makeDraggable(this);
 }
 
-titleImage::~titleImage() {
-    mainWindow::window->unmakeDraggable(this);
-}
 
 closeButton::closeButton(wxWindow *parent) : actionBitmapButton(
     parent,
