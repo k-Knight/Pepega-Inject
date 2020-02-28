@@ -6,6 +6,9 @@ aux_source_directory(installer/include installer_INCLUDE)
 aux_source_directory(installer/resources/source resource_SOURCE)
 aux_source_directory(installer/resources/include resource_INCLUDE)
 
+aux_source_directory(watcher/source watcher_SOURCE)
+aux_source_directory(watcher/include watcher_INCLUDE)
+
 set(wxWidgets_ROOT_DIR "C:/C++/wxWidgets")
 set(wxWidgets_INCLUDE_DIRS "C:/C++/wxWidgets/include/wx")
 
@@ -37,3 +40,12 @@ target_link_libraries(installer ${wxWidgets_LIBRARIES})
 set(PEPEGA_INSTALLER_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/installer/resources/source/icon.res)
 message(${PEPEGA_INSTALLER_LINKFLAGS})
 set_target_properties(installer PROPERTIES LINK_FLAGS ${PEPEGA_INSTALLER_LINKFLAGS})
+
+
+
+include_directories("C:/C++/efsw/include/efsw")
+link_directories("C:/C++/efsw/lib/")
+
+add_executable(watcher ${watcher_SOURCE} ${watcher_INCLUDE})
+target_compile_features(watcher PRIVATE cxx_std_17)
+target_link_libraries(watcher efsw)
