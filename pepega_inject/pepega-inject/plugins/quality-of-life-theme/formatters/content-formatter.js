@@ -48,16 +48,26 @@ contentFormatter = function(mutationsList, observer) {
             }
         }
 
-        if (!mutation.qolt_processed && mutation.removedNodes.length == 1 && mutation.removedNodes[0].classList) {
-            if (mutation.removedNodes[0].classList.contains("modal-3c3bKg")) {
-                setTimeout(() => {
-                    cancelContentDisplay();
-                }, 10);
-                mutation.qolt_processed = true;
+        if (!mutation.qolt_processed && mutation.removedNodes.length > 0) {
+            if(mutation.removedNodes.length == 1 && mutation.removedNodes[0].classList) {
+                if (mutation.target && mutation.target.classList.contains("container-1ov-mD") &&
+                    mutation.nextSibling && mutation.nextSibling.classList.contains("qolt-content-closer")) {
+
+                    deleteContentCloser(mutation.nextSibling);
+                    mutation.qolt_processed = true;
+                }
+                if (!mutation.qolt_processed) {
+                    if (mutation.removedNodes[0].classList.contains("modal-3c3bKg")) {
+                        setTimeout(() => {
+                            cancelContentDisplay();
+                        }, 10);
+                        mutation.qolt_processed = true;
+                    }
+                    else if (mutation.removedNodes[0].classList.contains("layer-v9HyYc"))
+                        if (mutation.removedNodes[0].querySelector(".contextMenu-HLZMGh"))
+                            ContextMenuManager.removeContextMenu();
+                }
             }
-            else if (mutation.removedNodes[0].classList.contains("layer-v9HyYc"))
-                if (mutation.removedNodes[0].querySelector(".contextMenu-HLZMGh"))
-                    ContextMenuManager.removeContextMenu();
         }
     }
 }

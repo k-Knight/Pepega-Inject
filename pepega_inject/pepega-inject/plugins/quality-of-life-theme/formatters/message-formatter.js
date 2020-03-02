@@ -201,6 +201,10 @@ appendCloser = function(parent, node, asyncExecute) {
     }, 10);
 }
 
+deleteContentCloser = function(node) {
+    node.remove();
+}
+
 formatEmdeds = function(container, asyncExecute) {
     for (let childNode of container.children)
         if (childNode.classList.contains('attachment-33OFj0'))
