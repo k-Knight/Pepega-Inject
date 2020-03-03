@@ -1,15 +1,13 @@
-.container-1ov-mD > .embedWrapper-lXpS3L:not(.attachment-33OFj0) {
+.container-1ov-mD > .imageWrapper-2p5ogY.embedWrapper-lXpS3L:not(.attachment-33OFj0):not(.imageZoom-1n-ADA),
+.container-1ov-mD > .embedFull-2tM8--.embedWrapper-lXpS3L:not(.attachment-33OFj0):not(.imageZoom-1n-ADA) {
     max-width: 100% !important;
     max-height: 100% !important;
+    display: flex !important;
     --resize-background: linear-gradient(135deg,
         rgb(47,49,54) 0,
         rgb(47,49,54) calc(100% - 9px),
         rgb(73, 76, 85) calc(100% - 9px)
     );
-}
-.container-1ov-mD > .embedWrapper-lXpS3L:not(.attachment-33OFj0) {
-    max-width: calc(100% - 56px) !important;
-    display: flex !important;
 }
 .container-1ov-mD > .embedWrapper-lXpS3L.imageWrapper-2p5ogY:not(.imageZoom-1n-ADA),
 .container-1ov-mD > .embedWrapper-lXpS3L > .embedVideo-3nf0O9 > .imageWrapper-2p5ogY {
@@ -56,7 +54,7 @@
 
 
 .qolt-content-closer {
-    width: calc(100% - 56px) !important;
+    width: 100% !important;
     height: 21px !important;
     display: block !important;
     border-radius: 3px !important;
